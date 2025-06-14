@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oinam’s Countdown</title>
+  <style>
+    :root {
+      --bg-color: oklch(100% 0 0);
+      --text-color: oklch(18% 0 0);
+      --accent-color: oklch(60% 0 0);
+      --border-color: oklch(92% 0 0);
+      --article-bg: oklch(98% 0 0);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: oklch(8% 0 0);
+        --text-color: oklch(100% 0 0);
+        --accent-color: oklch(70% 0 0);
+        --border-color: oklch(20% 0 0);
+        --article-bg: oklch(12% 0 0);
+      }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    main {
+      max-width: min(42rem, 96vw);
+      width: 100%;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .date-display {
+      font-size: 7rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+      letter-spacing: -0.05em;
+    }
+
+    .day-time-line {
+      font-size: 2rem;
+      font-weight: 400;
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--accent-color);
+      letter-spacing: 0.05em;
+    }
+
+    .date-line {
+      font-size: 7rem;
+      font-weight: 700;
+      display: block;
+      margin: 0.5rem 0;
+      letter-spacing: -0.05em;
+    }
+
+    .year-line {
+      font-size: 2rem;
+      font-weight: 400;
+      display: block;
+      color: var(--accent-color);
+      letter-spacing: 0.05em;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3rem;
+      font-size: 1.1rem;
+    }
+
+    .countdown-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .countdown-number {
+      font-size: 2.5rem;
+      font-weight: 600;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .countdown-label {
+      font-size: 0.9rem;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    article {
+      background-color: var(--article-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: left;
+      line-height: 1.6;
+      color: var(--accent-color);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    article h1 {
+      color: var(--text-color);
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .date-display {
+        font-size: 5rem;
+      }
+
+      .day-time-line {
+        font-size: 1.5rem;
+      }
+
+      .date-line {
+        font-size: 5rem;
+      }
+
+      .year-line {
+        font-size: 1.5rem;
+      }
+
+      .countdown {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+      }
+
+      .countdown-number {
+        font-size: 2rem;
+      }
+
+      .countdown-label {
+        font-size: 0.8rem;
+      }
+
+      article {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .date-display {
+        font-size: 3.5rem;
+      }
+
+      .day-time-line {
+        font-size: 1.2rem;
+      }
+
+      .date-line {
+        font-size: 3.5rem;
+      }
+
+      .year-line {
+        font-size: 1.2rem;
+      }
+
+      .countdown-number {
+        font-size: 1.5rem;
+      }
+
+      .countdown {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- Change the target date and time below -->
+    <!-- data-target-date: Use YYYY-MM-DD format (e.g., "2025-07-18") -->
+    <!-- data-target-time: Use HH:MM format in 24-hour time (e.g., "19:07" for 7:07 PM) -->
+    <div class="date-display" id="targetDate" 
+         data-target-date="2025-07-18" 
+         data-target-time="19:07">
+      <span class="day-time-line" id="dayTimeDisplay">Fri, 7:07 PM</span>
+      <span class="date-line" id="dateDisplay">Jul 18</span>
+      <span class="year-line" id="yearDisplay">2025</span>
+    </div>
+    
+    <div class="countdown">
+      <div class="countdown-item">
+        <div class="countdown-number" id="years">0</div>
+        <div class="countdown-label">Years</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-number" id="months">0</div>
+        <div class="countdown-label">Months</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-number" id="days">0</div>
+        <div class="countdown-label">Days</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-number" id="hours">0</div>
+        <div class="countdown-label">Hours</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-number" id="minutes">0</div>
+        <div class="countdown-label">Minutes</div>
+      </div>
+      <div class="countdown-item">
+        <div class="countdown-number" id="seconds">0</div>
+        <div class="countdown-label">Seconds</div>
+      </div>
+    </div>
+    
+    <article>
+      <h1>Oinam Family Friends Party</h1>
+      <p>
+        Some sort of a party thing or that excuse to just meet up, have fun, and spend time together.
+      </p>
+    </article>
+  </main>
+
+  <script>
+    // Get target date and time from HTML data attributes
+    const targetDateElement = document.getElementById('targetDate');
+    const targetDateStr = targetDateElement.dataset.targetDate;
+    const targetTimeStr = targetDateElement.dataset.targetTime;
+    
+    // Combine date and time into ISO 8601 format
+    const targetDateTimeISO = `${targetDateStr}T${targetTimeStr}:00`;
+    const targetDate = new Date(targetDateTimeISO).getTime();
+    const targetDateObj = new Date(targetDateTimeISO);
+
+    // Format and display the target date
+    function formatTargetDate() {
+      const dayOptions = { weekday: 'short' };
+      const dateOptions = { month: 'short', day: 'numeric' };
+      const formattedDay = targetDateObj.toLocaleDateString('en-US', dayOptions);
+      const formattedDate = targetDateObj.toLocaleDateString('en-US', dateOptions);
+      
+      // Format time in 12-hour format with AM/PM
+      const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+      const formattedTime = targetDateObj.toLocaleTimeString('en-US', timeOptions);
+      
+      const year = targetDateObj.getFullYear();
+      
+      document.getElementById('targetDate').innerHTML = `<span class="day-time-line" id="dayTimeDisplay">${formattedDay}, ${formattedTime}</span><span class="date-line" id="dateDisplay">${formattedDate}</span><span class="year-line" id="yearDisplay">${year}</span>`;
+    }
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      // If the date has passed
+      if (distance < 0) {
+        document.getElementById('years').textContent = '0';
+        document.getElementById('months').textContent = '0';
+        document.getElementById('days').textContent = '0';
+        document.getElementById('hours').textContent = '0';
+        document.getElementById('minutes').textContent = '0';
+        document.getElementById('seconds').textContent = '0';
+        return;
+      }
+
+      // Calculate time units
+      const totalSeconds = Math.floor(distance / 1000);
+      const totalMinutes = Math.floor(totalSeconds / 60);
+      const totalHours = Math.floor(totalMinutes / 60);
+      const totalDays = Math.floor(totalHours / 24);
+      const totalMonths = Math.floor(totalDays / 30.44); // Average days per month
+      const years = Math.floor(totalMonths / 12);
+      
+      const months = totalMonths % 12;
+      const days = Math.floor(totalDays % 30.44);
+      const hours = totalHours % 24;
+      const minutes = totalMinutes % 60;
+      const seconds = totalSeconds % 60;
+
+      // Update the countdown display
+      document.getElementById('years').textContent = years;
+      document.getElementById('months').textContent = months;
+      document.getElementById('days').textContent = days;
+      document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+      document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+      document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+    }
+
+    // Format target date and update countdown immediately and then every second
+    formatTargetDate();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
